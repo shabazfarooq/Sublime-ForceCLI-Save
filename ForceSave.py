@@ -65,12 +65,3 @@ class EventDump(sublime_plugin.EventListener):
             print("SFDC save ended: " + file + " @ " + datetime.datetime.strftime(endTime, '%-I:%M:%S %p'))
             sublime.active_window().run_command("show_panel", {"panel": "console", "toggle": False})
             view.window().focus_group(view.window().active_group())
-
-
-
-            # cmd_result = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
-            
-            # # print results
-            # cmd_result_split = cmd_result.splitlines()
-            # for line in cmd_result_split:
-            #     print(str(line))

@@ -53,12 +53,9 @@ class EventDump(sublime_plugin.EventListener):
             while proc.poll() is None:
                 line = proc.stdout.readline()
                 lineToString = line.strip().decode("utf-8")
-
                 if lineToString:
                     print("     " + lineToString)
 
-            # for line in proc.stdout.read().split('\n'):
-            #     print(line.rstrip())
 
             endTime = datetime.datetime.now()
             print("")

@@ -14,15 +14,15 @@ class EventDump(sublime_plugin.EventListener):
         # Determine if this is a SFDC type
         sfdc_meta_type=""
         if file_extension == "cls":
-            sfdc_meta_type = "ApexClass"
+            sfdc_meta_type = "classes"
         elif file_extension == "page":
-            sfdc_meta_type = "ApexPage"
+            sfdc_meta_type = "pages"
         elif file_extension == "resource":
-            sfdc_meta_type = "StaticResource"
+            sfdc_meta_type = "staticresources"
         elif file_extension == "component":
-            sfdc_meta_type = "ApexComponent"
+            sfdc_meta_type = "components"
         elif file_extension == "trigger":
-            sfdc_meta_type = "ApexTrigger"
+            sfdc_meta_type = "triggers"
 
         # If it is an SFDC type proceed to save
         if sfdc_meta_type != "":
@@ -36,7 +36,9 @@ class EventDump(sublime_plugin.EventListener):
             # Login, cd into workspace dir, execute force cli save
             commands = [workspace_dir + "login",
                         "cd " + workspace_dir,
-                        "force push -type " + sfdc_meta_type + " -name " + file_wo_extension]
+                        "force push -f src/" + sfdc_meta_type + "/" + file]
+
+                        # "force push -type " + sfdc_meta_type + " -name " + file_wo_extension]
 
             command = " && ".join(commands)
 

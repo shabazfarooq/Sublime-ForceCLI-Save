@@ -23,22 +23,34 @@ class EventDump(sublime_plugin.EventListener):
             sfdc_meta_type = "components"
         elif file_extension == "trigger":
             sfdc_meta_type = "triggers"
+        elif file_extension == "apex":
+            sfdc_meta_type = "_apex_"
 
         # If it is an SFDC type proceed to save
         if sfdc_meta_type != "":
             # Get workspace directory
             # assuming the parent dir is 3 directories up from file being saved
-            workspace_dir = file_split[:-3]
+            # workspace_dir = file_split[:-1]  <--- CAUSING ISSUES BECAUSE OF DIFF SAVE PLACES
+            workspace_dir = file_split[:5]
             workspace_dir = '/'.join(workspace_dir)
             workspace_dir = workspace_dir + '/'
             
+            print(workspace_dir)
+            #### path issues for files being saved from different locations
+
             # Generate shell commands
             # Login, cd into workspace dir, execute force cli save
-            commands = [workspace_dir + "login",
-                        "cd " + workspace_dir,
+            commands = ["cd " + workspace_dir,
+                        "./login",
                         "force push -f src/" + sfdc_meta_type + "/" + file]
 
                         # "force push -type " + sfdc_meta_type + " -name " + file_wo_extension]
+            
+            if sfdc_meta_type == "_apex_":
+                commands[2] = "force apex ./" + file
+
+            print("Executing: " + workspace_dir)
+
 
             command = " && ".join(commands)
 
@@ -47,6 +59,8 @@ class EventDump(sublime_plugin.EventListener):
             view.window().focus_group(view.window().active_group())
 
             startTime = datetime.datetime.now()
+            print("")
+            print(command)
             print("")
             print("SFDC save started: " + file + " @ " + datetime.datetime.strftime(startTime, '%-I:%M:%S %p'))
             print("")
